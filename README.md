@@ -29,4 +29,9 @@ Este proyecto es una aplicación web que permite comparar productos entre distin
      cd backend
      uvicorn main:app --reload
      ```
-Ojo, hay que tener fastapi instalado.
+Ojo, hay que tener fastapi instalado y se necesita node 20.
+```
+nvm install 20
+nvm use 20
+```
+.

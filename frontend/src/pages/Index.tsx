@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Navbar from '../components/Navbar';
 import ProductCard from '../components/ProductCard';
@@ -11,19 +12,29 @@ interface Product {
   link: string;
   supermercado: string;
   tipo: string;
+  grupo?: number;
 }
 
 const Index: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchGroupedProducts = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/productos/');
+        const res = await fetch('http://127.0.0.1:8000/productos/grupos/');
         const data = await res.json();
-        setProducts(data);
+
+        const primerosProductos = data
+          .map((grupo: { grupo: number; productos: Product[] }) => ({
+            ...grupo.productos[0],
+            grupo: grupo.grupo,
+          }))
+          .filter(Boolean);
+
+        setProducts(primerosProductos);
       } catch (error) {
         console.error('Error al cargar productos:', error);
       } finally {
@@ -31,7 +42,7 @@ const Index: React.FC = () => {
       }
     };
 
-    fetchProducts();
+    fetchGroupedProducts();
   }, []);
 
   return (
@@ -57,17 +68,18 @@ const Index: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {products.map(product => (
-              <ProductCard
-                key={product.id}
-                product={{
-                  id: product.id.toString(),
-                  nombre: product.nombre,
-                  imagen: product.imagen,
-                  precio: product.precio,
-                  supermercado: product. supermercado,
-                  tipo: product.tipo,
-                }}
-              />
+              <div key={product.id} onClick={() => navigate(`/grupo/${product.grupo}`)} className="cursor-pointer">
+                <ProductCard
+                  product={{
+                    id: product.id.toString(),
+                    nombre: product.nombre,
+                    imagen: product.imagen,
+                    precio: product.precio,
+                    supermercado: product.supermercado,
+                    tipo: product.tipo,
+                  }}
+                />
+              </div>
             ))}
           </div>
         )}
