@@ -4,6 +4,7 @@ import { ArrowLeft, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Navbar from '../components/Navbar';
+import PriceChart from '../components/PriceChart';
 
 interface Product {
   id: number;
@@ -63,6 +64,27 @@ const ProductDetail: React.FC = () => {
     );
   }
 
+// Fechas para los últimos 10 días
+const dates = Array.from({ length: 10 }, (_, i) => {
+  const date = new Date();
+  date.setDate(date.getDate() - (9 - i));
+  return date.toISOString().slice(0, 10);
+});
+
+// Precios fijos para Unimarc: 1690 -> 1900 -> 1800
+const unimarcPrices = dates.map((_, i) => {
+  if (i < 3) return 1690;
+  if (i < 6) return 1900;
+  return 1800;
+});
+
+// Precios fijos para Santa Isabel: 1990 -> 1750 -> 1850
+const santaIsabelPrices = dates.map((_, i) => {
+  if (i < 2) return 1990;
+  if (i < 5) return 1750;
+  return 1850;
+});
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -97,6 +119,14 @@ const ProductDetail: React.FC = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+        <div className="mt-10">
+          <h3 className="text-xl font-semibold mb-4">Evolución de precios</h3>
+          <PriceChart
+            dates={dates}
+            unimarcPrices={unimarcPrices}
+            santaIsabelPrices={santaIsabelPrices}
+          />
         </div>
       </main>
     </div>

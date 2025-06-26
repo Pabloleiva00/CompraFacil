@@ -23,6 +23,9 @@ const Navbar: React.FC = () => {
               <ShoppingCart className="h-8 w-8 text-green-600" />
               <span className="text-2xl font-bold text-gray-900">Comprafácil</span>
             </Link>
+            <Link to="/comercios" className="ml-8">
+              <Button style={{ backgroundColor: '#28a44c', color: 'white' }} variant="ghost">Comercios</Button>
+            </Link>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -42,10 +45,10 @@ const Navbar: React.FC = () => {
             ) : (
               <>
                 <Link to="/login">
-                  <Button variant="ghost">Iniciar Sesión</Button>
+                  <Button variant="ghost" style={{ backgroundColor: '#28a44c', color: 'white' }}>Iniciar Sesión</Button>
                 </Link>
                 <Link to="/signup">
-                  <Button className="bg-green-600 hover:bg-green-700">Registrarse</Button>
+                  <Button className="bg-green-600 hover:bg-green-700" style={{ backgroundColor: '#2596be', color: 'white' }}>Registrarse</Button>
                 </Link>
               </>
             )}
